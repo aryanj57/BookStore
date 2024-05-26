@@ -1,7 +1,9 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Login from "./Login";
 import { useForm } from "react-hook-form";
+import axios from "axios";
+import toast from "react-hot-toast";
 
 const Signup = () => {
   const {
@@ -10,7 +12,31 @@ const Signup = () => {
     formState: { errors },
   } = useForm();
 
-  const onSubmit = (data) => console.log(data);
+  const navigate = useNavigate();
+  const onSubmit = async (data) => {
+    const { name, email, password } = data;
+    const userInfo = {
+      fullname: name,
+      email: email,
+      password: password,
+    };
+    await axios
+      .post("http://localhost:8000/user/signup", userInfo)
+      .then((res) => {
+        console.log(res.data);
+        if (res.data) {
+          toast.success("Signed up successfull");
+          navigate(-1);
+          localStorage.setItem("users", JSON.stringify(res.data.user));
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+        if (err.response) {
+          toast.error("error: " + err.response.data.message);
+        } else toast.error("error: " + err);
+      });
+  };
 
   return (
     <>
