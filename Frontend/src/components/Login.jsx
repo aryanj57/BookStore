@@ -27,14 +27,14 @@ const Login = () => {
           setTimeout(() => {
             window.location.reload();
             localStorage.setItem("users", JSON.stringify(res.data.user));
-          }, 3000);
+          }, 2000);
         }
       })
       .catch((err) => {
         console.log(err);
         if (err.response) {
           toast.error("error: " + err.response.data.message);
-          setTimeout(() => {}, 3000);
+          setTimeout(() => {}, 2000);
         } else toast.error("error: " + err);
       });
   };
